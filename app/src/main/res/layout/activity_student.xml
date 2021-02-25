@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/teacher"
+        style="@style/labelText"
+        android:layout_width="378dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:text="TextView"
+        android:textAlignment="viewStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/corp" />
+
+    <TextView
+        android:id="@+id/corp"
+        style="@style/labelText"
+        android:layout_width="378dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:text="TextView"
+        android:textAlignment="viewStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cabinet" />
+
+    <TextView
+        android:id="@+id/cabinet"
+        style="@style/labelText"
+        android:layout_width="378dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:text="TextView"
+        android:textAlignment="viewStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subject" />
+
+    <TextView
+        android:id="@+id/subject"
+        style="@style/labelText"
+        android:layout_width="378dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="18dp"
+        android:text="TextView"
+        android:textAlignment="viewStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status" />
+
+    <TextView
+        android:id="@+id/status"
+        style="@style/labelText"
+        android:layout_width="378dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="18dp"
+        android:text="TextView"
+        android:textAlignment="viewStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time" />
+
+    <TextView
+        android:id="@+id/textView"
+        style="@style/labelText"
+        android:layout_width="378dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="17dp"
+        android:text="@string/groupList"
+        android:textAlignment="viewStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/groupList"
+        android:layout_width="160dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/time"
+        style="@style/labelText"
+        android:layout_width="378dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="18dp"
+        android:text="TextView"
+        android:textAlignment="viewStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/groupList" />
+
+    <LinearLayout
+        android:layout_width="323dp"
+        android:layout_height="57dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="18dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/teacher">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="161dp"
+            android:layout_height="wrap_content"
+            android:insetRight="5dp"
+            android:text="@string/dayButton" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:insetLeft="5dp"
+            android:text="@string/weekButton" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

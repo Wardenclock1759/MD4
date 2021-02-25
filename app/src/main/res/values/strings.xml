@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Lab 2</string>
+    <string name="studentsButton">Расписание для студентов</string>
+    <string name="teacherButton">Расписание для преподавателя</string>
+    <string name="dayButton">Расписание на день</string>
+    <string name="weekButton">Расписание на неделю</string>
+    <string name="groupList">Список групп</string>
+    <string name="settingsString">Настройки</string>
+
+    <string name="photoLabel">Укажите фото</string>
+    <string name="illuminanceLabel">Текущая освещенность</string>
+    <string name="save_settings_button">Сохранить</string>
+    <string name="take_photo_button">Сделать фото</string>
+    <string name="name_hint">Укажите ваше имя</string>
+</resources>
