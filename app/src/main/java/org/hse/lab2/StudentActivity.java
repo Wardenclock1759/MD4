@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class StudentActivity extends AppCompatActivity {
+public class StudentActivity extends MainActivity {
     public TextView time;
     public TextView status;
     public TextView subject;
@@ -29,13 +29,14 @@ public class StudentActivity extends AppCompatActivity {
     public TextView corp;
     public TextView teacher;
     Date currentTime = new Date();
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
 
-        final Spinner spinner = findViewById(R.id.groupList);
+        spinner = findViewById(R.id.groupList);
 
         List<StudentActivity.Group> groups = new ArrayList<>();
         initGroupList(groups);
@@ -58,7 +59,7 @@ public class StudentActivity extends AppCompatActivity {
         });
 
         time = findViewById(R.id.time);
-        //initTime();
+        initTime(time);
 
         status = findViewById(R.id.status);
         subject = findViewById(R.id.subject);
@@ -67,38 +68,19 @@ public class StudentActivity extends AppCompatActivity {
         teacher = findViewById(R.id.teacher);
 
         initData();
+
+        View scheduleDay = findViewById(R.id.schedule_day);
+        scheduleDay.setOnClickListener(v -> showSchedule(ScheduleType.DAY));
+        View scheduleWeek = findViewById(R.id.schedule_week);
+        scheduleWeek.setOnClickListener(v -> showSchedule(ScheduleType.WEEK));
     }
 
-    static class Group {
-        private Integer id;
-        private String name;
-
-        public Group(Integer id, String name) {
-            this.id = id;
-            this.name = name;
+    private void showSchedule(ScheduleType type) {
+        Object selectedItem = spinner.getSelectedItem();
+        if (!(selectedItem instanceof Group)) {
+            return;
         }
-
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-
-        @NonNull
-        @Override
-        public String toString() {
-            return name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
+        showScheduleImpl(ScheduleMode.STUDENT, type, (Group) selectedItem);
     }
 
     private void initGroupList(List<Group> groups) {
@@ -118,13 +100,7 @@ public class StudentActivity extends AppCompatActivity {
             }
         }
     }
-/*
-    private void initTime() {
-        SimpleDateFormat simpleDateFormat = new java.text.SimpleDateFormat
-                ("HH:mm:EEEE", Locale.getDefault());
-        time.setText(java.text.SimpleDateFormat.format((currentTime)));
-    }
-*/
+
     private void initData() {
         status.setText("Нет пар");
         subject.setText("Дисциплина");

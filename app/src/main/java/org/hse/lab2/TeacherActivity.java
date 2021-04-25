@@ -17,20 +17,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class TeacherActivity extends AppCompatActivity {
+public class TeacherActivity extends MainActivity {
     public TextView time;
     public TextView status;
     public TextView subject;
     public TextView cabinet;
     public TextView corp;
     public TextView teacher;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_techer);
 
-        final Spinner spinner = findViewById(R.id.groupList);
+        spinner = findViewById(R.id.groupList);
 
         List<StudentActivity.Group> groups = new ArrayList<>();
         initGroupList(groups);
@@ -53,7 +54,7 @@ public class TeacherActivity extends AppCompatActivity {
         });
 
         time = findViewById(R.id.time);
-      //  initTime();
+        initTime(time);
 
         status = findViewById(R.id.status);
         subject = findViewById(R.id.subject);
@@ -62,19 +63,25 @@ public class TeacherActivity extends AppCompatActivity {
         teacher = findViewById(R.id.teacher);
 
         initData();
+        View scheduleDay = findViewById(R.id.schedule_day);
+        scheduleDay.setOnClickListener(v -> showSchedule(ScheduleType.DAY));
+        View scheduleWeek = findViewById(R.id.schedule_week);
+        scheduleWeek.setOnClickListener(v -> showSchedule(ScheduleType.WEEK));
+    }
+
+    private void showSchedule(ScheduleType type) {
+        Object selectedItem = spinner.getSelectedItem();
+        if (!(selectedItem instanceof Group)) {
+            return;
+        }
+        showScheduleImpl(ScheduleMode.TEACHER, type, (Group) selectedItem);
     }
 
     private void initGroupList(List<StudentActivity.Group> groups) {
         groups.add(new StudentActivity.Group(1, "Преподаватель 1"));
         groups.add(new StudentActivity.Group(2, "Преподаватель 2"));
     }
-/*
-    private void initTime() {
-        Date currentTime = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        time.setText(simpleDateFormat.format((currentTime)));
-    }
-*/
+
     private void initData() {
         status.setText("Нет пар");
         subject.setText("Дисциплина");
