@@ -19,7 +19,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <TextView
-        android:id="@+id/photo_label"
+        android:id="@+id/imageLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="11dp"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/user_photo"
+        android:id="@+id/studentImage"
         android:layout_width="141dp"
         android:layout_height="139dp"
         android:layout_marginStart="8dp"
@@ -41,14 +41,14 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
-        android:id="@+id/take_photo_button"
+        android:id="@+id/imageButton"
         android:layout_width="128dp"
         android:layout_height="52dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="36dp"
         android:text="@string/take_photo_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_photo" />
+        app:layout_constraintTop_toBottomOf="@+id/studentImage" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -57,7 +57,7 @@
         android:layout_marginStart="48dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/user_photo"
+        app:layout_constraintStart_toEndOf="@+id/studentImage"
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
@@ -71,7 +71,7 @@
             android:inputType="textPersonName" />
 
         <TextView
-            android:id="@+id/light_label"
+            android:id="@+id/lightLabel"
             android:layout_width="wrap_content"
             android:layout_height="31dp"
             android:text="@string/illuminanceLabel" />

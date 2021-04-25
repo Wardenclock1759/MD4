@@ -5,10 +5,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
@@ -32,7 +30,6 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -65,10 +62,10 @@ public class SettingsActivity extends AppCompatActivity implements SensorEventLi
         preferenceManager = new PreferenceManager(this);
 
         View saveButton = findViewById(R.id.saveButton);
-        View takePictureButton = findViewById(R.id.take_photo_button);
+        View takePictureButton = findViewById(R.id.imageButton);
         sensorList = (ListView) findViewById(R.id.sensorList);
         name = findViewById(R.id.name);
-        photo = findViewById(R.id.user_photo);
+        photo = findViewById(R.id.studentImage);
 
         initData();
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +111,6 @@ public class SettingsActivity extends AppCompatActivity implements SensorEventLi
 
     private void dispatchTakePictureIntent() {
         Intent takePicIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Log.e("kk", getPackageManager().toString());
         if (takePicIntent.resolveActivity(getPackageManager()) != null) {
             File photoFile = null;
             try {
@@ -123,7 +119,9 @@ public class SettingsActivity extends AppCompatActivity implements SensorEventLi
                 Log.e("PhotoTaken", "Create file", e);
             }
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", photoFile);
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        BuildConfig.APPLICATION_ID
+                        + ".provider", photoFile);
                 takePicIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 try {
                     startActivityForResult(takePicIntent, REQUEST_IMAGE_CAPTURE);
@@ -135,7 +133,9 @@ public class SettingsActivity extends AppCompatActivity implements SensorEventLi
     }
 
     private File createImageFile() throws IOException{
-        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        @SuppressLint("SimpleDateFormat") String timeStamp =
+                new SimpleDateFormat("yyyyMMdd_HHmmss")
+                        .format(new Date());
         String imageFileName = "IMG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -194,6 +194,7 @@ public class SettingsActivity extends AppCompatActivity implements SensorEventLi
         for (Sensor currentSensor : sensors ) {
             sensorsNames.add(currentSensor.getName());
         }
-        sensorList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, sensorsNames));
+        sensorList.setAdapter(new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, sensorsNames));
     }
 }

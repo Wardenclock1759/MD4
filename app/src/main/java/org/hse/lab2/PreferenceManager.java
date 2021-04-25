@@ -5,13 +5,13 @@ import android.content.SharedPreferences;
 
 public class PreferenceManager {
 
-    private final static String PREFERENCE_FILE = "org.hse.lab2.file";
-    private final static String PICTURE_KEY = "picture";
-    private final static String PREFERENCE_NAME = "name";
+    private final static String filePath = "org.hse.lab2.file";
+    private final static String imageKey = "picture";
+    private final static String nameKey = "name";
     private final SharedPreferences sharedPref;
 
     public PreferenceManager(Context context) {
-        sharedPref = context.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE);
+        sharedPref = context.getSharedPreferences(filePath, Context.MODE_PRIVATE);
     }
 
     private void saveValue(String key, String value) {
@@ -25,15 +25,15 @@ public class PreferenceManager {
     }
 
     public void saveName(String name){
-        saveValue(PREFERENCE_NAME, name);
+        saveValue(nameKey, name);
     }
     public String getName(){
-        return getValue(PREFERENCE_NAME, "");
+        return getValue(nameKey, "");
     }
     public void savePicture(String uri){
-        saveValue(PICTURE_KEY, uri);
+        saveValue(imageKey, uri);
     }
     public String getPicture(){
-        return getValue(PICTURE_KEY, null);
+        return getValue(imageKey, null);
     }
 }
