@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,8 +65,10 @@ public class MainActivity extends AppCompatActivity {
     protected void showScheduleImpl(ScheduleMode mode, ScheduleType type, Group group) {
         Intent intent = new Intent(this, ScheduleActivity.class);
         intent.putExtra(ScheduleActivity.ARG_ID, group.getId());
+        intent.putExtra(ScheduleActivity.ARG_TITLE, group.getName());
         intent.putExtra(ScheduleActivity.ARG_TYPE, type);
         intent.putExtra(ScheduleActivity.ARG_MODE, mode);
+        intent.putExtra(ScheduleActivity.ARG_TIME, currentTime);
         startActivity(intent);
     }
 
