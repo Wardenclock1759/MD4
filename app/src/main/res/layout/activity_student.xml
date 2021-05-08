@@ -105,7 +105,6 @@
         android:layout_marginStart="18dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="18dp"
-        android:text="TextView"
         android:textAlignment="viewStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -123,14 +122,14 @@
         app:layout_constraintTop_toBottomOf="@+id/teacher">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/schedule_day"
             android:layout_width="161dp"
             android:layout_height="wrap_content"
             android:insetRight="5dp"
             android:text="@string/dayButton" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/schedule_week"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:insetLeft="5dp"
