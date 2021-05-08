@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     private OkHttpClient client = new OkHttpClient();
 
-    protected void getTime(TextView time) {
+    protected void getTime() {
         Request request = new Request.Builder().url(URL).build();
         Call call = client.newCall(request);
         call.enqueue(new Callback() {
@@ -53,13 +53,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                parseResponse(response, time);
+                parseResponse(response);
             }
         });
     }
 
-    protected void initTime(TextView time) {
-        getTime(time);
+    protected void initTime() {
+        getTime();
     }
 
     protected void showScheduleImpl(ScheduleMode mode, ScheduleType type, Group group) {
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void showTime(Date dateTime, TextView time) {
+    private void showTime(Date dateTime) {
         if (dateTime == null) {
             return;
         }
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         time.setText(simpleDateFormat.format(currentTime));
     }
 
-    private void parseResponse(Response response, TextView time) {
+    private void parseResponse(Response response) {
         Gson gson = new Gson();
         ResponseBody body = response.body();
         try {
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             String currentTimeVal = timeResponse.getTimeZone().getCurrentTime();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
             Date dateTime = simpleDateFormat.parse(currentTimeVal);
-            runOnUiThread(() -> showTime(dateTime, time));
+            runOnUiThread(() -> showTime(dateTime));
         } catch (Exception e) {
             Log.e(TAG, "", e);
         }

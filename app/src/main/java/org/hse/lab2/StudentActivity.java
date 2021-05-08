@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class StudentActivity extends MainActivity {
-    public TextView time;
     public TextView status;
     public TextView subject;
     public TextView cabinet;
@@ -59,7 +58,7 @@ public class StudentActivity extends MainActivity {
         });
 
         time = findViewById(R.id.time);
-        initTime(time);
+        initTime();
 
         status = findViewById(R.id.status);
         subject = findViewById(R.id.subject);

@@ -76,9 +76,6 @@ public class ScheduleActivity extends AppCompatActivity {
         if (currentTime != null) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE, dd MMM", Locale.forLanguageTag("ru"));
             timeView.setText(simpleDateFormat.format(currentTime));
-            ScheduleItemHeader header = new ScheduleItemHeader();
-            header.setTitle(simpleDateFormat.format(currentTime));
-            list.add(header);
         }
 
         ScheduleItem item = new ScheduleItem();
