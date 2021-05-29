@@ -1,6 +1,4 @@
-package model;
-
-import androidx.appcompat.app.AppCompatActivity;
+package org.hse.lab2.model;
 
 public class ScheduleItem {
     private String start;

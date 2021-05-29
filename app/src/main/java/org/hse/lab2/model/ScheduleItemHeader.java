@@ -1,4 +1,4 @@
-package model;
+package org.hse.lab2.model;
 
 public class ScheduleItemHeader extends ScheduleItem {
     private String title;

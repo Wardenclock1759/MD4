@@ -1,4 +1,4 @@
-package org.hse.lab2;
+package org.hse.lab2.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -27,6 +27,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import org.hse.lab2.BuildConfig;
+import org.hse.lab2.utils.PreferenceManager;
+import org.hse.lab2.R;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -42,7 +46,7 @@ public class SettingsActivity extends AppCompatActivity implements SensorEventLi
 
     private EditText name;
     private ImageView photo;
-    private org.hse.lab2.PreferenceManager preferenceManager;
+    private PreferenceManager preferenceManager;
     private SensorManager sensorManager;
     private Sensor light;
     private TextView sensorLight;

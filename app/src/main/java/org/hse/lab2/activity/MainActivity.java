@@ -1,30 +1,30 @@
-package org.hse.lab2;
+package org.hse.lab2.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.gson.Gson;
 
+import org.hse.lab2.R;
+import org.hse.lab2.entity.GroupEntity;
+import org.hse.lab2.model.Group;
+import org.hse.lab2.view.MainViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-import model.TimeResponse;
+import org.hse.lab2.model.TimeResponse;
+import org.jetbrains.annotations.Nullable;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -39,8 +39,9 @@ public class MainActivity extends AppCompatActivity {
 
     protected TextView time;
     protected Date currentTime;
+    protected MainViewModel mainViewModel;
 
-    private OkHttpClient client = new OkHttpClient();
+    private final OkHttpClient client = new OkHttpClient();
 
     protected void getTime() {
         Request request = new Request.Builder().url(URL).build();
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void showTime(Date dateTime) {
+    protected void showTime(Date dateTime) {
         if (dateTime == null) {
             return;
         }
@@ -101,9 +102,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
         View buttonStudent = findViewById(R.id.studentsButton);
         View buttonTeacher = findViewById(R.id.teacherButton);
@@ -144,37 +146,6 @@ public class MainActivity extends AppCompatActivity {
     private void showTeacher() {
         Intent intent = new Intent(this, TeacherActivity.class);
         startActivity(intent);
-    }
-
-    static class Group {
-        private Integer id;
-        private String name;
-
-        public Group(Integer id, String name) {
-            this.id = id;
-            this.name = name;
-        }
-
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
     }
 
     enum ScheduleType {

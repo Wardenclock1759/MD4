@@ -1,4 +1,4 @@
-package org.hse.lab2;
+package org.hse.lab2.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.hse.lab2.R;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
@@ -22,8 +23,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import model.ScheduleItem;
-import model.ScheduleItemHeader;
+import org.hse.lab2.model.ScheduleItem;
+import org.hse.lab2.model.ScheduleItemHeader;
 
 public class ScheduleActivity extends AppCompatActivity {
 
