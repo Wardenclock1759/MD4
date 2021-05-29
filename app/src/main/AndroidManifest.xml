@@ -29,23 +29,23 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StudentActivity">
+        <activity android:name=".activity.StudentActivity">
 
         </activity>
-        <activity android:name=".TeacherActivity">
+        <activity android:name=".activity.TeacherActivity">
 
         </activity>
-        <activity android:name=".SettingsActivity">
+        <activity android:name=".activity.SettingsActivity">
 
         </activity>
-        <activity android:name=".ScheduleActivity">
+        <activity android:name=".activity.ScheduleActivity">
 
         </activity>
     </application>

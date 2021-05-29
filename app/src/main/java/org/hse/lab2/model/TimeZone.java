@@ -1,4 +1,4 @@
-package model;
+package org.hse.lab2.model;
 
 import com.google.gson.annotations.SerializedName;
 

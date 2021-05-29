@@ -1,4 +1,4 @@
-package org.hse.lab2;
+package org.hse.lab2.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
