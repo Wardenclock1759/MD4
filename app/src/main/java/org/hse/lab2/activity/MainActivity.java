@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.gson.Gson;
@@ -14,11 +16,13 @@ import com.google.gson.Gson;
 import org.hse.lab2.R;
 import org.hse.lab2.entity.GroupEntity;
 import org.hse.lab2.model.Group;
+import org.hse.lab2.model.Teacher;
 import org.hse.lab2.view.MainViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.Clock;
 import java.util.Date;
 import java.util.Locale;
 
@@ -37,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final String URL = "https://api.ipgeolocation.io/ipgeo?apiKey=b03018f75ed94023a005637878ec0977";
 
-    protected TextView time;
+    protected TextClock time;
     protected Date currentTime;
     protected MainViewModel mainViewModel;
 
@@ -63,10 +67,20 @@ public class MainActivity extends AppCompatActivity {
         getTime();
     }
 
-    protected void showScheduleImpl(ScheduleMode mode, ScheduleType type, Group group) {
+    protected void showScheduleStudent(ScheduleMode mode, ScheduleType type, Group group) {
         Intent intent = new Intent(this, ScheduleActivity.class);
         intent.putExtra(ScheduleActivity.ARG_ID, group.getId());
         intent.putExtra(ScheduleActivity.ARG_TITLE, group.getName());
+        intent.putExtra(ScheduleActivity.ARG_TYPE, type);
+        intent.putExtra(ScheduleActivity.ARG_MODE, mode);
+        intent.putExtra(ScheduleActivity.ARG_TIME, currentTime);
+        startActivity(intent);
+    }
+
+    protected void showScheduleTeacher(ScheduleMode mode, ScheduleType type, Teacher teacher) {
+        Intent intent = new Intent(this, ScheduleActivity.class);
+        intent.putExtra(ScheduleActivity.ARG_ID, teacher.getId());
+        intent.putExtra(ScheduleActivity.ARG_TITLE, teacher.getFio());
         intent.putExtra(ScheduleActivity.ARG_TYPE, type);
         intent.putExtra(ScheduleActivity.ARG_MODE, mode);
         intent.putExtra(ScheduleActivity.ARG_TIME, currentTime);
@@ -78,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         currentTime = dateTime;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm, EEEE", Locale.forLanguageTag("ru"));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         time.setText(simpleDateFormat.format(currentTime));
     }
 
@@ -93,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, string);
             TimeResponse timeResponse = gson.fromJson(string, TimeResponse.class);
             String currentTimeVal = timeResponse.getTimeZone().getCurrentTime();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
             Date dateTime = simpleDateFormat.parse(currentTimeVal);
             runOnUiThread(() -> showTime(dateTime));
         } catch (Exception e) {

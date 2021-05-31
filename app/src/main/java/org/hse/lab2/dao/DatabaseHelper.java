@@ -6,10 +6,10 @@ import androidx.room.TypeConverters;
 
 import org.hse.lab2.entity.GroupEntity;
 import org.hse.lab2.entity.TeacherEntity;
-import org.hse.lab2.entity.TimeTableEntity;
+import org.hse.lab2.entity.TimeTable;
 import org.hse.lab2.utils.Converters;
 
-@Database(entities = {GroupEntity.class, TeacherEntity.class, TimeTableEntity.class},
+@Database(entities = {GroupEntity.class, TeacherEntity.class, TimeTable.class},
         version = 1,
         exportSchema = false)
 @TypeConverters({Converters.class})

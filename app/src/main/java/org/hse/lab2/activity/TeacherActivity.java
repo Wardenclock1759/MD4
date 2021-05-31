@@ -6,21 +6,23 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
 
 import org.hse.lab2.R;
-import org.hse.lab2.entity.GroupEntity;
 import org.hse.lab2.entity.TeacherEntity;
+import org.hse.lab2.entity.TimeTable;
 import org.hse.lab2.entity.TimeTableEntity;
-import org.hse.lab2.entity.TimeTableWithTeacherEntity;
 import org.hse.lab2.model.Group;
 import org.hse.lab2.model.Teacher;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static org.hse.lab2.utils.Converters.dateFromString;
 
 public class TeacherActivity extends MainActivity {
     public TextView status;
@@ -50,8 +52,8 @@ public class TeacherActivity extends MainActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View itemSelected, int selectedItemPosition, long id) {
-                selectedIndex = selectedItemPosition;
-                Object item = adapter.getItem(selectedItemPosition);
+                Teacher item = adapter.getItem(selectedItemPosition);
+                updateData(dateFromString((String) time.getText()), item.getId());
                 Log.d("Teacher", "selectedItem: " + item);
             }
 
@@ -79,27 +81,16 @@ public class TeacherActivity extends MainActivity {
 
     private void showSchedule(ScheduleType type) {
         Object selectedItem = spinner.getSelectedItem();
-        if (!(selectedItem instanceof Group)) {
+        if (!(selectedItem instanceof Teacher)) {
             return;
         }
-        showScheduleImpl(ScheduleMode.TEACHER, type, (Group) selectedItem);
+        showScheduleTeacher(ScheduleMode.TEACHER, type, (Teacher) selectedItem);
     }
 
     @Override
     protected void showTime(Date dateTime) {
         super.showTime(dateTime);
-        mainViewModel.getTimeTableTeacherByDate(dateTime).observe(this, new Observer<List<TimeTableWithTeacherEntity>>() {
-            @Override
-            public void onChanged(List<TimeTableWithTeacherEntity> list) {
-                for (TimeTableWithTeacherEntity listEntity : list) {
-                    Log.d("TAG", listEntity.timeTableEntity.subj_name + " " + listEntity.teacherEntity.fio);
-                    // TODO move to DB query
-                    if (getSelectedTeacher() != null && getSelectedTeacher().getId().equals(listEntity.timeTableEntity.teacherId)) {
-                        initDataFromTimeTable(listEntity);
-                    }
-                }
-            }
-        });
+        updateData(dateTime, null);
     }
 
     private void initGroupList(final List<Teacher> teachers) {
@@ -120,7 +111,32 @@ public class TeacherActivity extends MainActivity {
         initDataFromTimeTable(null);
     }
 
-    private void initDataFromTimeTable(TimeTableWithTeacherEntity timeTableWithTeacherEntity) {
+    private void updateData(Date currentTime, Integer id) {
+        if (id == null) {
+            mainViewModel.getTimeTableTeacherByDate(currentTime).observe(this, list -> {
+                for (TimeTableEntity listEntity : list) {
+                    Log.d("Timetable without ID", listEntity.timeTableEntity.subj_name + " " + listEntity.teacherEntity.fio);
+                    Teacher teacher = getSelectedTeacher();
+                    if (teacher != null && teacher.getId().equals(listEntity.timeTableEntity.teacherId)) {
+                        initDataFromTimeTable(listEntity);
+                        return;
+                    }
+                }
+                initDataFromTimeTable(null);
+                return;
+            });
+        }
+        mainViewModel.getTimeTableByTeacherIdAndDate(id, currentTime).observe(this, list -> {
+            for (TimeTableEntity listEntity : list) {
+                Log.d("Timetable with ID", listEntity.timeTableEntity.subj_name + " " + listEntity.teacherEntity.fio);
+                initDataFromTimeTable(listEntity);
+                return;
+            }
+            initDataFromTimeTable(null);
+        });
+    }
+
+    private void initDataFromTimeTable(TimeTableEntity timeTableWithTeacherEntity) {
         if (timeTableWithTeacherEntity == null) {
             status.setText("Нет пар");
             subject.setText("Дисциплина");
@@ -130,7 +146,7 @@ public class TeacherActivity extends MainActivity {
             return;
         }
         status.setText("Идет пара");
-        TimeTableEntity timeTableEntity = timeTableWithTeacherEntity.timeTableEntity;
+        TimeTable timeTableEntity = timeTableWithTeacherEntity.timeTableEntity;
 
         subject.setText(timeTableEntity.subj_name);
         cabinet.setText(timeTableEntity.cabinet);
@@ -139,6 +155,7 @@ public class TeacherActivity extends MainActivity {
     }
 
     private Teacher getSelectedTeacher() {
-        return selectedIndex == -1 ? null : adapter.getItem(selectedIndex);
+        Object selectedItem = spinner.getSelectedItem();
+        return  !(spinner.getSelectedItem() instanceof Teacher) ? null : (Teacher) selectedItem;
     }
 }

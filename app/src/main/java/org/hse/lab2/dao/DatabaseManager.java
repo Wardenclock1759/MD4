@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import org.hse.lab2.entity.GroupEntity;
 import org.hse.lab2.entity.TeacherEntity;
-import org.hse.lab2.entity.TimeTableEntity;
+import org.hse.lab2.entity.TimeTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,31 +72,97 @@ public class DatabaseManager {
         teachers.add(teacher);
         DatabaseManager.getInstance(context).getHseDao().insertTeacher(teachers);
 
-        List<TimeTableEntity> timeTables = new ArrayList<>();
-        TimeTableEntity timeTable = new TimeTableEntity();
+        List<TimeTable> timeTables = new ArrayList<>();
+        TimeTable timeTable = new TimeTable();
         timeTable.id = 1;
         timeTable.cabinet = "Кабинет 102";
         timeTable.sub_group = "БИ";
         timeTable.subj_name = "Философия";
         timeTable.corp = "К1";
         timeTable.type = 0;
-        timeTable.time_start = dateFromString("2021-05-28 9:40");
-        timeTable.time_end = dateFromString("2021-05-28 11:00");
+        timeTable.time_start = dateFromString("2021-05-31 21:41");
+        timeTable.time_end = dateFromString("2021-05-31 21:50");
         timeTable.groupId = 1;
         timeTable.teacherId = 1;
         timeTables.add(timeTable);
-        timeTable = new TimeTableEntity();
+        timeTable = new TimeTable();
         timeTable.id = 2;
         timeTable.cabinet = "Кабинет 507";
         timeTable.sub_group = "БИ";
         timeTable.subj_name = "Мобильная разработка";
         timeTable.corp = "К1";
         timeTable.type = 0;
-        timeTable.time_start = dateFromString("2021-05-28 13:00");
-        timeTable.time_end = dateFromString("2021-05-28 15:00");
+        timeTable.time_start = dateFromString("2021-05-31 21:00");
+        timeTable.time_end = dateFromString("2021-05-31 23:30");
+        timeTable.groupId = 2;
+        timeTable.teacherId = 2;
+        timeTables.add(timeTable);
+
+        timeTable = new TimeTable();
+        timeTable.id = 3;
+        timeTable.cabinet = "Кабинет 507";
+        timeTable.sub_group = "БИ";
+        timeTable.subj_name = "Мобильная разработка";
+        timeTable.corp = "К1";
+        timeTable.type = 0;
+        timeTable.time_start = dateFromString("2021-05-31 21:00");
+        timeTable.time_end = dateFromString("2021-05-31 23:30");
         timeTable.groupId = 1;
         timeTable.teacherId = 2;
         timeTables.add(timeTable);
+
+        timeTable = new TimeTable();
+        timeTable.id = 4;
+        timeTable.cabinet = "Кабинет 507";
+        timeTable.sub_group = "БИ";
+        timeTable.subj_name = "Мобильная разработка";
+        timeTable.corp = "К1";
+        timeTable.type = 0;
+        timeTable.time_start = dateFromString("2021-06-01 21:00");
+        timeTable.time_end = dateFromString("2021-06-01 23:30");
+        timeTable.groupId = 1;
+        timeTable.teacherId = 2;
+        timeTables.add(timeTable);
+
+        timeTable = new TimeTable();
+        timeTable.id = 5;
+        timeTable.cabinet = "Кабинет 507";
+        timeTable.sub_group = "БИ";
+        timeTable.subj_name = "Мобильная разработка";
+        timeTable.corp = "К1";
+        timeTable.type = 0;
+        timeTable.time_start = dateFromString("2021-05-30 21:00");
+        timeTable.time_end = dateFromString("2021-05-30 23:30");
+        timeTable.groupId = 1;
+        timeTable.teacherId = 2;
+        timeTables.add(timeTable);
+
+        timeTable = new TimeTable();
+        timeTable.id = 6;
+        timeTable.cabinet = "Кабинет 507";
+        timeTable.sub_group = "БИ";
+        timeTable.subj_name = "Мобильная разработка";
+        timeTable.corp = "К1";
+        timeTable.type = 0;
+        timeTable.time_start = dateFromString("2021-06-07 21:00");
+        timeTable.time_end = dateFromString("2021-06-07 23:30");
+        timeTable.groupId = 1;
+        timeTable.teacherId = 2;
+        timeTables.add(timeTable);
+
+        timeTable = new TimeTable();
+        timeTable.id = 7;
+        timeTable.cabinet = "Кабинет 508";
+        timeTable.sub_group = "БИ";
+        timeTable.subj_name = "Мобильная разработка";
+        timeTable.corp = "К1";
+        timeTable.type = 0;
+        timeTable.time_start = dateFromString("2021-06-04 21:00");
+        timeTable.time_end = dateFromString("2021-06-04 23:30");
+        timeTable.groupId = 1;
+        timeTable.teacherId = 2;
+        timeTables.add(timeTable);
+
         DatabaseManager.getInstance(context).getHseDao().insertTimeTable(timeTables);
     }
 }

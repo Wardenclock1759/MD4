@@ -9,17 +9,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import org.hse.lab2.R;
 import org.hse.lab2.entity.GroupEntity;
+import org.hse.lab2.entity.TimeTable;
 import org.hse.lab2.entity.TimeTableEntity;
-import org.hse.lab2.entity.TimeTableWithTeacherEntity;
 import org.hse.lab2.model.Group;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static org.hse.lab2.utils.Converters.dateFromString;
 
 public class StudentActivity extends MainActivity {
     public TextView status;
@@ -27,9 +30,7 @@ public class StudentActivity extends MainActivity {
     public TextView cabinet;
     public TextView corp;
     public TextView teacher;
-    Date currentTime = new Date();
     private Spinner spinner;
-    private int selectedIndex = -1;
     ArrayAdapter<Group> adapter;
 
     @Override
@@ -41,16 +42,14 @@ public class StudentActivity extends MainActivity {
 
         List<Group> groups = new ArrayList<>();
         initGroupList(groups);
-
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, groups);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View itemSelected, int selectedItemPosition, long id) {
-                selectedIndex = selectedItemPosition;
-                Object item = adapter.getItem(selectedItemPosition);
+                Group item = adapter.getItem(selectedItemPosition);
+                updateData(dateFromString((String) time.getText()), item.getId());
                 Log.d("student", "selectedItem: " + item);
             }
 
@@ -82,25 +81,14 @@ public class StudentActivity extends MainActivity {
         if (!(selectedItem instanceof Group)) {
             return;
         }
-        showScheduleImpl(ScheduleMode.STUDENT, type, (Group) selectedItem);
+        showScheduleStudent(ScheduleMode.STUDENT, type, (Group) selectedItem);
     }
-
     @Override
     protected void showTime(Date dateTime) {
         super.showTime(dateTime);
-        mainViewModel.getTimeTableTeacherByDate(dateTime).observe(this, new Observer<List<TimeTableWithTeacherEntity>>() {
-            @Override
-            public void onChanged(List<TimeTableWithTeacherEntity> list) {
-                for (TimeTableWithTeacherEntity listEntity : list) {
-                    Log.d("TAG", listEntity.timeTableEntity.subj_name + " " + listEntity.teacherEntity.fio);
-                    // TODO move to DB query
-                    if (getSelectedGroup() != null && getSelectedGroup().getId().equals(listEntity.timeTableEntity.groupId)) {
-                        initDataFromTimeTable(listEntity);
-                    }
-                }
-            }
-        });
+        updateData(dateTime, null);
     }
+
 
     private void initGroupList(List<Group> groups) {
        mainViewModel.getGroups().observe(this, new Observer<List<GroupEntity>>() {
@@ -120,7 +108,7 @@ public class StudentActivity extends MainActivity {
         initDataFromTimeTable(null);
     }
 
-    private void initDataFromTimeTable(TimeTableWithTeacherEntity timeTableWithTeacherEntity) {
+    private void initDataFromTimeTable(TimeTableEntity timeTableWithTeacherEntity) {
         if (timeTableWithTeacherEntity == null) {
             status.setText("Нет пар");
             subject.setText("Дисциплина");
@@ -130,16 +118,43 @@ public class StudentActivity extends MainActivity {
             return;
         }
         status.setText("Идет пара");
-        TimeTableEntity timeTableEntity = timeTableWithTeacherEntity.timeTableEntity;
+        TimeTable timeTableEntity = timeTableWithTeacherEntity.timeTableEntity;
 
         subject.setText(timeTableEntity.subj_name);
         cabinet.setText(timeTableEntity.cabinet);
         corp.setText(timeTableEntity.corp);
-        teacher.setText(timeTableWithTeacherEntity.teacherEntity.fio);
+        teacher.setText(timeTableWithTeacherEntity.timeTableEntity.time_start.toString());
     }
 
     private Group getSelectedGroup() {
-        return selectedIndex == -1 ? null : adapter.getItem(selectedIndex);
+        Object selectedItem = spinner.getSelectedItem();
+        return  !(spinner.getSelectedItem() instanceof Group) ? null : (Group) selectedItem;
+    }
+
+    private void updateData(Date currentTime, Integer id) {
+        if (id == null) {
+            mainViewModel.getTimeTableTeacherByDate(currentTime).observe(this, list -> {
+                for (TimeTableEntity listEntity : list) {
+                    Log.d("Timetable without ID", listEntity.timeTableEntity.subj_name + " " + listEntity.teacherEntity.fio);
+                    Group group = getSelectedGroup();
+                    if (group != null && group.getId().equals(listEntity.timeTableEntity.groupId)) {
+                        initDataFromTimeTable(listEntity);
+                        return;
+                    }
+                }
+                initDataFromTimeTable(null);
+                return;
+            });
+        }
+        mainViewModel.getTimeTableByGroupIdAndDate(id, currentTime).observe(this, list -> {
+            for (TimeTableEntity listEntity : list) {
+                Log.d("Timetable with ID", listEntity.timeTableEntity.subj_name + " " + listEntity.teacherEntity.fio);
+                initDataFromTimeTable(listEntity);
+                return;
+
+            }
+            initDataFromTimeTable(null);
+        });
     }
 }
 

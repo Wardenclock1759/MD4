@@ -3,22 +3,30 @@ package org.hse.lab2.activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.hse.lab2.R;
+import org.hse.lab2.entity.GroupEntity;
+import org.hse.lab2.entity.TimeTableEntity;
+import org.hse.lab2.model.Group;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -26,7 +34,12 @@ import java.util.Locale;
 import org.hse.lab2.model.ScheduleItem;
 import org.hse.lab2.model.ScheduleItemHeader;
 
-public class ScheduleActivity extends AppCompatActivity {
+import static org.hse.lab2.utils.Converters.dateFromString;
+import static org.hse.lab2.utils.Converters.getNearestWeekEnd;
+import static org.hse.lab2.utils.Converters.scheduleItemFromTimeTable;
+import static org.hse.lab2.utils.Converters.trimDate;
+
+public class ScheduleActivity extends MainActivity {
 
     public static final String ARG_TYPE = "type";
     public static final String ARG_MODE = "mode";
@@ -44,6 +57,8 @@ public class ScheduleActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ItemAdapter adapter;
     private TextView timeView;
+    List<ScheduleItem> scheduleItemList = new ArrayList<>();
+    ScheduleItem item = new ScheduleItem();
 
 
     @Override
@@ -59,7 +74,6 @@ public class ScheduleActivity extends AppCompatActivity {
 
         TextView titleView = findViewById(R.id.title);
         titleView.setText(title);
-
         timeView = findViewById(R.id.time);
 
         recyclerView = findViewById(R.id.listView);
@@ -68,36 +82,70 @@ public class ScheduleActivity extends AppCompatActivity {
         adapter = new ItemAdapter(this::onScheduleItemClick);
         recyclerView.setAdapter(adapter);
 
+        Date t = getNearestWeekEnd(currentTime);
+        Log.d("time", t.toString());
+
         initData();
     }
 
     private void initData() {
-        List<ScheduleItem> list = new ArrayList<>();
+        if (mode == ScheduleMode.STUDENT) {
+            if (type == ScheduleType.DAY) {
+                mainViewModel.getTimeTableByTimeGroup(trimDate(currentTime), trimDate(currentTime), id).observe(this, list -> {
+                    Log.d("time", list.toString());
+                    for (TimeTableEntity listEntity : list) {
+                        item = new ScheduleItem();
+                        item = scheduleItemFromTimeTable(listEntity, true);
+                        scheduleItemList.add(item);
+                        Log.d("scheduleItem", item.getTeacher());
+                    }
+                    adapter.setDataList(scheduleItemList);
+                });
+            }
+            else {
+                mainViewModel.getTimeTableByTimeGroup(trimDate(currentTime), trimDate(getNearestWeekEnd(currentTime)), id).observe(this, list -> {
+                    Log.d("time", list.toString());
+                    for (TimeTableEntity listEntity : list) {
+                        item = new ScheduleItem();
+                        item = scheduleItemFromTimeTable(listEntity, true);
+                        scheduleItemList.add(item);
+                        Log.d("scheduleItem", item.getTeacher());
+                    }
+                    adapter.setDataList(scheduleItemList);
+                });
+            }
+        }
+        else {
+            if (type == ScheduleType.DAY) {
+                mainViewModel.getTimeTableByTimeTeacher(trimDate(currentTime), trimDate(currentTime), id).observe(this, list -> {
+                    Log.d("time", list.toString());
+                    for (TimeTableEntity listEntity : list) {
+                        item = new ScheduleItem();
+                        item = scheduleItemFromTimeTable(listEntity, false);
+                        scheduleItemList.add(item);
+                        Log.d("scheduleItem", item.getTeacher());
+                    }
+                    adapter.setDataList(scheduleItemList);
+                });
+            }
+            else {
+                mainViewModel.getTimeTableByTimeTeacher(trimDate(currentTime), trimDate(getNearestWeekEnd(currentTime)), id).observe(this, list -> {
+                    Log.d("time", list.toString());
+                    for (TimeTableEntity listEntity : list) {
+                        item = new ScheduleItem();
+                        item = scheduleItemFromTimeTable(listEntity, false);
+                        scheduleItemList.add(item);
+                        Log.d("scheduleItem", item.getTeacher());
+                    }
+                    adapter.setDataList(scheduleItemList);
+                });
+            }
+        }
 
         if (currentTime != null) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE, dd MMM", Locale.forLanguageTag("ru"));
             timeView.setText(simpleDateFormat.format(currentTime));
         }
-
-        ScheduleItem item = new ScheduleItem();
-        item.setStart("10:00");
-        item.setEnd("11:00");
-        item.setType("Семинар");
-        item.setName("Программирование");
-        item.setPlace("Ауд. 503, Корпус 3");
-        item.setTeacher("Викентьева Ольга Леонидовна");
-        list.add(item);
-
-        item = new ScheduleItem();
-        item.setStart("11:30");
-        item.setEnd("12:30");
-        item.setType("Семинар");
-        item.setName("Программирование");
-        item.setPlace("Ауд. 503, Корпус 3");
-        item.setTeacher("Викентьева Ольга Леонидовна");
-        list.add(item);
-
-        adapter.setDataList(list);
     }
 
     private void onScheduleItemClick(ScheduleItem data) {
